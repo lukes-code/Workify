@@ -229,3 +229,62 @@ p.top-track-duration {
 .safe-tracks .track {
   border-right: 5px solid #a7e9af;
 }
+
+.searchBox {
+  position: absolute;
+  top: 0%;
+  right: 2%;
+  transform: translate(-5%,35%);
+  background: #dcdcdc;
+  height: 40px;
+  border-radius: 40px;
+  padding: 10px;
+  color: #333;
+}
+
+.searchInput:focus {
+  width: 240px;
+  padding: 0 6px;
+}
+
+.searchBox:hover > .searchButton {
+  background: white;
+  color : #2f3640;
+  cursor: pointer;
+}
+
+.searchButton {
+  color: white;
+  float: right;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #2f3640;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.4s;
+}
+
+.searchInput {
+  border: none;
+  background: none;
+  outline: none;
+  float: left;
+  padding: 0;
+  color: #333;
+  font-size: 16px;
+  transition: 0.4s;
+  line-height: 40px;
+  width: 50px;
+  border-radius: 40px;
+}
+
+
+
+@media screen and (max-width: 620px) {
+.searchBox:hover > .searchInput {
+  width: 150px;
+  padding: 0 6px;
+}
+}

@@ -8,14 +8,16 @@ class Search extends React.Component {
     }
     render() {
         return (
-            <div className="input-group">
+            <div className="searchBox">
               <input 
                 type="text" 
                 name="name"
                 onChange={this.props.updateQuery}
                 onKeyDown={this.keyHandler}
-                className="form-control" 
-                placeholder="Search for..." />
+                className="searchInput" 
+                placeholder="Search"
+                autocomplete="off"
+              />
           </div>
         );
     }

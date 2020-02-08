@@ -32,7 +32,7 @@ class App extends Component {
     const FETCHUSERDETAILS = 'me';
     const FETCHSEARCH = 'search?';
     const FETCHARTISTS = 'artists';
-    var accessToken = 'BQDPL4W3LfCjsGQTOCe6EjhjRhRZARg6k66wbiR_Jrg__AEpbmt6Fvk5SK9s9Qg9jSezE-IMwIX_ur4XEG52RUJIuKfYsWCGGY1KTGcwTDt1xvt-K02a9lPKewbQIiBtNQK5EBMTvflDA6yCwvyDwboyCXDIsApF2ug'
+    var accessToken = 'BQAJYpCnYiCgygAh5mrYDq1blbWUmp9hgYUpHL87deJEhtnIdZZorrNw-MoABBtNlD6qej07gvG41AdXUEQhLJBO64H9C0fGAWPStvReRSmzDI1fgYbgTFb_D9RNT07WZX5riFEk4213wldeS00ZK9MAUxHNR8CoLQY'
     const FETCHUSERDETAILS_URL = BASE_URL + FETCHUSERDETAILS;
     const FETCHARTIST_URL = BASE_URL + FETCHSEARCH + 'q=' + this.state.query + '&type=artist&limit=1';
     let FETCHTOPTRACKS_URL = '';
