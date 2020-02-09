@@ -43,6 +43,7 @@ body{
   background: #F0F2F6;
   background-size: cover;
   background-repeat: no-repeat;
+  margin: 0px;
 }
 
 .landing-page{
@@ -287,4 +288,112 @@ p.top-track-duration {
   width: 150px;
   padding: 0 6px;
 }
+}
+
+.landing-button {
+  display: flex;
+  position: relative;
+  top: 60%;
+}
+
+.landing-logo {
+  text-align: center;
+  position: relative;
+  top: 20%;
+}
+
+.home-page{
+  height: 100vh;
+  background-image: url('./bg.jpg');
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.spotify-default{
+  color: #1DB954;
+}
+
+#logo-label{
+  text-transform: uppercase;
+}
+
+#sub-text{
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: bold;
+  line-height: 0;
+}
+
+button.def-btn {
+  border: none;
+  background: #1DB954;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 1rem;
+  border-radius: 25px;
+  width: 15rem;
+  color: #fff;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+button.def-btn:hover {
+  background: #1ED760;
+}
+
+button a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button.sign-out {
+  flex: 1;
+  background: #F0F2F6;
+  border-radius: 10px;
+  min-height: 1rem;
+  padding: 13px;
+  margin: 8px 8px;
+  box-shadow: -1px 7px 11px 0px #dcdcdc;
+  transition: all 0.4s ease;
+  border: none;
+  width: 92%;
+  font-family: 'montserrat';
+  font-size: 1rem;
+}
+
+button.sign-out:hover{
+  cursor: pointer;
+  background: #da2d2d;
+}
+
+.welcome {
+  text-align: center;
+  position: relative;
+  margin: 15px;
+}
+
+h1#disclaimer {
+  margin-top: 200px;
+  text-transform: uppercase;
+}
+
+#disclaimer-btn {
+  margin-top: 10vh;
+}
+
+img.disclaimer-image {
+  max-height: 100px;
+}
+
+@media only screen and (min-width: 768px){
+  h1#disclaimer{
+    margin-bottom: 100px;
+  }
+  .disclaimer-image{
+    margin-bottom: 50px;
+  }
 }

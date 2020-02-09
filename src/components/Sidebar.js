@@ -15,6 +15,12 @@ class Sidebar extends React.Component {
                     <p className="user-panel">{capitalizeFirstLetter(this.props.username)}</p>
                     <p className="user-panel">{capitalizeFirstLetter(this.props.product)} user</p>
                     <p className="user-panel">{this.props.followers} followers</p>
+                    <button
+                    onClick={this.props.signout}
+                    className="sign-out"
+                >
+                    Sign Out
+                </button>
                 </div>
             </div>
         );
