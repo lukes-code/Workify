@@ -14,7 +14,7 @@ class Landing extends React.Component {
                     className="def-btn"
                     // onClick={this.props.login}
                 >
-                    <a href="https://accounts.spotify.com/authorize?client_id=32eceb9f568649ada17a620892f797e0&redirect_uri=http://localhost:3001/callback/&scope=user-top-read user-read-private user-read-email user-read-recently-played user-follow-read&response_type=token&state=123">
+                    <a href="https://accounts.spotify.com/authorize?client_id=32eceb9f568649ada17a620892f797e0&redirect_uri=https://workify.netlify.com/callback/&scope=user-top-read user-read-private user-read-email user-read-recently-played user-follow-read&response_type=token&state=123">
                     Log in to Spotify
                     </a>
                 </button>
