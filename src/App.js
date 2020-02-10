@@ -6,8 +6,8 @@ import SafeTracks from './components/SafeTracks';
 import UnsafeTracks from './components/UnsafeTracks';
 import Sidebar from './components/Sidebar';
 import Landing from './components/Landing';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Welcome from './components/Welcome';
+import UserTopTracks from './components/UserTopTracks';
 
 class App extends Component {
 
@@ -25,6 +25,17 @@ class App extends Component {
         product: '',
         image: '',
         followers: 0,
+      }),
+      userTop: ({
+        tracks: ({
+          artist: [],
+          track: [],
+          image: [],
+          explicit: [],
+          popularity: [],
+          duration: [],
+          safe: 0,
+        }),
       }),
       token: ''
     }
@@ -54,8 +65,11 @@ class App extends Component {
     userLogin = (async) => {
       const BASE_URL = 'https://api.spotify.com/v1/';
       const FETCHUSERDETAILS = 'me';
+      const userTop = 'me/top/';
+      const userTracks = 'tracks?time_range=medium_term&limit=25&offset=5';
       var accessToken = this.state.token;
       const FETCHUSERDETAILS_URL = BASE_URL + FETCHUSERDETAILS;
+      const fetchUserTracks = BASE_URL + userTop + userTracks;
       var myOptions = {
         method: 'GET',
         headers: {
@@ -66,7 +80,7 @@ class App extends Component {
       };
 
       // Get current user details
-      fetch('https://api.spotify.com/v1/me', myOptions)
+      fetch(FETCHUSERDETAILS_URL, myOptions)
         .then(response => response.json())
         .then(json => {
           console.log(json);
@@ -75,9 +89,42 @@ class App extends Component {
           const followers = json.followers.total;
           const image = json.images[0].url;
           if(this.state.userDetails.username === ''){
-            this.setState({ userDetails: ({ username: username, product: product, followers: followers, image: image, token: 'hi' })});
+            this.setState({ userDetails: ({ username: username, product: product, followers: followers, image: image, })});
           }
         });
+
+        // Get current user details
+      fetch('https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=25&offset=5', myOptions)
+      .then(response => response.json())
+      .then(json => {
+        var i = 0;
+        let safe = 0;
+        console.log(`user top tracks are - ${JSON.stringify(json.items[i].album)}`);
+        for (i = 0; i < json.items.length; i++) {
+          const jsonArtist = this.state.userTop.tracks.artist.concat(json.items[i].album.artists[0].name);
+          const jsonTracks = this.state.userTop.tracks.track.concat(json.items[i].name);
+          const jsonImage = this.state.userTop.tracks.image.concat(json.items[i].album.images[0].url);
+          const explicit = this.state.userTop.tracks.explicit.concat(json.items[i].explicit);
+          const popularity = this.state.userTop.tracks.popularity.concat(json.items[i].popularity);
+          const duration = this.state.userTop.tracks.duration.concat(json.items[i].duration_ms);
+          if(json.items[i].explicit === true){
+            safe++;
+          }
+          this.setState({ 
+            userTop: 
+            ({ tracks: 
+              ({ artist: jsonArtist, 
+                 track: jsonTracks,  
+                 image: jsonImage, 
+                 explicit: explicit, 
+                 popularity: popularity, 
+                 safe: safe,
+                 duration: duration,
+              }) 
+            }) 
+          });
+        }
+      });
     }
 
   search = (asycnc) => {
@@ -111,13 +158,17 @@ class App extends Component {
       });
 
     //Fetch artist details and then search for top tracks
+    if(this.state.query === ''){
+      return;
+    }
     fetch(FETCHARTIST_URL, myOptions)
       .then(response => response.json())
       .then(json => {
+        if(json.artists.items.length < 1){
+          return;
+        }
         const artist = json.artists.items[0];   
         this.setState({ artist });
-        // console.log(artist.images[0].url);
-
         let FETCHTOPTRACKS_URL = BASE_URL + FETCHARTISTS + '/' + artist.id + '/top-tracks?country=GB';
         fetch(FETCHTOPTRACKS_URL, myOptions)
           .then(response => response.json())
@@ -193,6 +244,20 @@ class App extends Component {
       />
     ));
 
+    //Set keys for multiple unsafe tracks
+    let userTopTracks = this.state.userTop.tracks.artist.map((userTopTrack, i) => (
+      <UserTopTracks
+        key={i}
+        index={i}
+        artist={this.state.userTop.tracks.artist[i]}
+        tracks={this.state.userTop.tracks.track[i]}
+        image={this.state.userTop.tracks.image[i]}
+        explicit={this.state.userTop.tracks.explicit[i]}
+        popularity={this.state.userTop.tracks.popularity[i]}
+        duration={this.state.userTop.tracks.duration[i]}
+      />
+    ));
+
     console.log('this.state', this.state);
  
     if(this.state.token === '' || this.state.token === undefined){
@@ -223,12 +288,20 @@ class App extends Component {
               followers={this.state.userDetails.followers}
               signout={this.signout}
           />
-          <div className="searched">
+          <div className="landing-page">
+        <div className="main-bg">
+        <div className="searched">
           <Search
               updateQuery={this.updateQuery}
               search={this.search}
           />
+          <h2 className="track-label personal">YOUR TOP 25 SONGS</h2>
+          {/* {/* <h3 className="lowkey-track-label">SAFE FOR WORK</h3> */}
+          <h3 className="lowkey-track-label">{this.state.userTop.tracks.safe} OF THESE ARE WORK SAFE</h3>
+          {userTopTracks}
         </div>
+        </div>
+      </div>
         </React.Fragment>
       );
     }
@@ -260,11 +333,11 @@ class App extends Component {
           hasSafeTracks={this.state.hasSafeTracks}
         />
         <h2 className="track-label">TOP 10 SONGS</h2>
-        <h3 className="lowkey-track-label">SAFE FOR WORK</h3>
+        <h3 className="lowkey-track-label">{this.state.safeTracks.length} SAFE FOR WORK</h3>
         <div className="safe-tracks">
           {safeTrack}
         </div>
-        <h3 className="lowkey-track-label">NOT SAFE FOR WORK</h3>
+        <h3 className="lowkey-track-label">{this.state.unsafeTracks.length} NOT SAFE FOR WORK</h3>
         <div className="unsafe-tracks">
           {unsafeTrack}
         </div>

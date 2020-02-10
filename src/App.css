@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+@import url('//db.onlinewebfonts.com/c/01173b246d9d9ea808ea75a26b3b61bb?family=Circular+Spotify+Tx+T+Black');
 .App {
   text-align: center;
 }
@@ -87,14 +88,17 @@ input.form-control {
 }
 
 img.artist-image {
-  max-height: 20rem;
+  max-height: 18rem;
   margin: 10px;
   border-radius: 5px;
+  position: absolute;
+  top: 18%;
+  left: 14%;
 }
 
 img.bg-image {
   width: 100%;
-  height: 50vh;
+  height: 30vh;
   object-fit: cover;
 }
 
@@ -117,6 +121,10 @@ img.bg-image {
   flex: 1;
   justify-content: left;
   text-align: left;
+  position: absolute;
+  top: 47%;
+  color: #333;
+  right: 25%;
 }
 
 .safe-tracks, .unsafe-tracks{
@@ -140,7 +148,6 @@ img.bg-image {
 
 .track:hover{
   background: #3D8CE7;
-  cursor: pointer;
 }
 
 .album-cover {
@@ -153,7 +160,7 @@ img.bg-image {
 .track-label {
   flex: 1 1;
   text-align: left;
-  margin: 0px 10px 10px 40px;
+  margin: 25px 10px 10px 40px;
 }
 
 .lowkey-track-label {
@@ -162,7 +169,7 @@ img.bg-image {
 }
 
 .top-track-name {
-  flex: 15;
+  flex: 2 1;
   margin-bottom: 20px;
   text-align: left;
   margin-left: 30px;
@@ -208,7 +215,6 @@ img.user-image {
 }
 
 .user-panel:hover{
-  cursor: pointer;
   background: #3D8CE7;
 }
 
@@ -229,6 +235,21 @@ p.top-track-duration {
 
 .safe-tracks .track {
   border-right: 5px solid #a7e9af;
+}
+
+div#notsafe {
+  border-right: 5px solid #da2d2d;
+}
+div#notsafe:hover {
+  background: #da2d2d;
+  color: #fff;
+}
+
+div#safe {
+  border-right: 5px solid #a7e9af;
+}
+div#safe:hover {
+  background: #a7e9af;
 }
 
 .searchBox {
@@ -300,6 +321,7 @@ p.top-track-duration {
   text-align: center;
   position: relative;
   top: 20%;
+  font-family: Circular Spotify Tx T Black;
 }
 
 .home-page{
@@ -397,3 +419,93 @@ img.disclaimer-image {
     margin-bottom: 50px;
   }
 }
+
+h2.track-label.personal {
+  margin-top: 75px;
+}
+
+/* === Progress bar === */
+
+.progress {
+  overflow: hidden;
+  margin: 0.9rem;
+  max-width: 30px;
+  height: 35px;
+  border-radius: 30%;
+  background-color: #F0F2F6;
+  flex: 5;
+  min-width: 35px;
+}
+
+.bar {
+  position: relative;
+  height: 100%;
+  background: cornflowerblue;
+}
+
+/* === === === */
+
+@media only screen and (max-width: 1024px){
+  .sidebar{
+    display: none;
+  }
+  .landing-page{
+    width: 100%;
+  }
+  body{
+    font-size: 0.7rem;
+  }
+  .track{
+    margin: 20px;
+  }
+  .top-track-name{
+    flex: 3;
+    margin-left: 15px;
+  }
+  p.top-track-duration {
+    margin-bottom: 20px;
+    margin-right: 0px;
+    flex: 1 1;
+  }
+}
+
+@media only screen and (max-width: 767px){
+  .artist{
+    min-height: 47vh;
+  }
+  img.artist-image{
+    left: 18%;
+    max-height: 15rem;
+  }
+  .artist-details {
+    top: 50%;
+    right: 20%;
+  }
+}
+
+@media only screen and (min-width: 599px) and (max-width: 699px){
+  .artist{
+    min-height: 65vh;
+  }
+  img.artist-image{
+    left: 18%;
+    max-height: 15rem;
+  }
+  .artist-details {
+    top: 75%;
+    right: 50%;
+  }
+}
+
+@media only screen and (max-width: 598px){
+  img.artist-image{
+    left: 8%;
+    max-height: 8rem;
+    top: 35%;
+  }
+  .artist-details {
+    top: 48%;
+    right: 15%;
+  }
+}
+

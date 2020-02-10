@@ -4,6 +4,7 @@ class Search extends React.Component {
     keyHandler = (e) => {
         if(e.keyCode === 13){
             this.props.search();
+            e.placeholder = 'Search'; 
         }
     }
     render() {
