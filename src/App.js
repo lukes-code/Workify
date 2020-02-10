@@ -8,6 +8,7 @@ import Sidebar from './components/Sidebar';
 import Landing from './components/Landing';
 import Welcome from './components/Welcome';
 import UserTopTracks from './components/UserTopTracks';
+import UserLogo from './user.png';
 
 class App extends Component {
 
@@ -83,11 +84,15 @@ class App extends Component {
       fetch(FETCHUSERDETAILS_URL, myOptions)
         .then(response => response.json())
         .then(json => {
-          console.log(json);
+          // console.log(json);
           const username = json.display_name;
           const product = json.product;
           const followers = json.followers.total;
-          const image = json.images[0].url;
+          const image = `${UserLogo}`;
+          if(json.images.length > 1){
+            const image = json.images[0].url;
+          } else {
+          }
           if(this.state.userDetails.username === ''){
             this.setState({ userDetails: ({ username: username, product: product, followers: followers, image: image, })});
           }
@@ -99,7 +104,7 @@ class App extends Component {
       .then(json => {
         var i = 0;
         let safe = 0;
-        console.log(`user top tracks are - ${JSON.stringify(json.items[i].album)}`);
+        // console.log(`user top tracks are - ${JSON.stringify(json.items[i].album)}`);
         for (i = 0; i < json.items.length; i++) {
           const jsonArtist = this.state.userTop.tracks.artist.concat(json.items[i].album.artists[0].name);
           const jsonTracks = this.state.userTop.tracks.track.concat(json.items[i].name);
@@ -149,7 +154,7 @@ class App extends Component {
     fetch('https://api.spotify.com/v1/me', myOptions)
       .then(response => response.json())
       .then(json => {
-        console.log(json);
+        // console.log(json);
         const username = json.display_name;
         const product = json.product;
         const followers = json.followers.total;
@@ -258,7 +263,7 @@ class App extends Component {
       />
     ));
 
-    console.log('this.state', this.state);
+    // console.log('this.state', this.state);
  
     if(this.state.token === '' || this.state.token === undefined){
       return (
