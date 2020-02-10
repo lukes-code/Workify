@@ -7,8 +7,7 @@ const Router = (theLanding) => (
     <BrowserRouter>
         <Switch>
             <Route exact path="/" component={App} />
-            <Route path="/callback" component={App} />
-            <Route component={NotFound} />
+            <Route component={App} />
         </Switch>
     </BrowserRouter>
 );
