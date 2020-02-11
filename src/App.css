@@ -528,3 +528,7 @@ h2.track-label.personal {
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
+
+a#login {
+  margin: 0 auto;
+}
