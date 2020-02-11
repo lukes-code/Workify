@@ -42,7 +42,6 @@ class App extends Component {
     }
   }
     componentDidMount() {
-      var vars = {}
       const queryUri = window.location.hash.substr(1);
       if(queryUri !== ''){
           var token = queryUri.match(/=(.*)&token_type/).pop();
@@ -55,7 +54,6 @@ class App extends Component {
     }
 
     login = (async) => {
-      var vars = {}
       const queryUri = window.location.hash.substr(1);
       if(queryUri !== ''){
           var token = queryUri.match(/=(.*)&token_type/).pop();
@@ -70,7 +68,7 @@ class App extends Component {
       const userTracks = 'tracks?time_range=medium_term&limit=25&offset=5';
       var accessToken = this.state.token;
       const FETCHUSERDETAILS_URL = BASE_URL + FETCHUSERDETAILS;
-      const fetchUserTracks = BASE_URL + userTop + userTracks;
+      // const fetchUserTracks = BASE_URL + userTop + userTracks;
       var myOptions = {
         method: 'GET',
         headers: {

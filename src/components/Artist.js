@@ -1,5 +1,4 @@
 import React from 'react';
-import Progress from './Progress';
 
 class Artist extends React.Component {
 

@@ -15,7 +15,7 @@ class Progress extends React.Component {
             <div className="tooltip">
                 <div className="progress">
                     <span className="tooltiptext">Popularity {this.props.popularity}/100</span>
-                    <div class="bar" style={this.setProgress()}>
+                    <div className="bar" style={this.setProgress()}>
                     </div>
                 </div>
             </div>

@@ -17,7 +17,7 @@ class Search extends React.Component {
                 onKeyDown={this.keyHandler}
                 className="searchInput" 
                 placeholder="Search artists"
-                autocomplete="off"
+                autoComplete="off"
               />
           </div>
         );
