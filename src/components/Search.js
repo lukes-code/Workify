@@ -4,7 +4,7 @@ class Search extends React.Component {
     keyHandler = (e) => {
         if(e.keyCode === 13){
             this.props.search();
-            e.placeholder = 'Search'; 
+            e.placeholder = 'Search artists'; 
         }
     }
     render() {
@@ -16,7 +16,7 @@ class Search extends React.Component {
                 onChange={this.props.updateQuery}
                 onKeyDown={this.keyHandler}
                 className="searchInput" 
-                placeholder="Search"
+                placeholder="Search artists"
                 autocomplete="off"
               />
           </div>

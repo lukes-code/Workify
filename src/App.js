@@ -91,8 +91,7 @@ class App extends Component {
           const image = `${UserLogo}`;
           if(json.images.length > 1){
             const image = json.images[0].url;
-          } else {
-          }
+          } 
           if(this.state.userDetails.username === ''){
             this.setState({ userDetails: ({ username: username, product: product, followers: followers, image: image, })});
           }
@@ -158,7 +157,10 @@ class App extends Component {
         const username = json.display_name;
         const product = json.product;
         const followers = json.followers.total;
-        const image = json.images[0].url;
+        const image = `${UserLogo}`;
+          if(json.images.length > 1){
+            const image = json.images[0].url;
+          } 
         this.setState({ userDetails: ({ username: username, product: product, followers: followers, image: image, token: 'hi' })});
       });
 

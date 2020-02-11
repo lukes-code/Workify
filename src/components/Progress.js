@@ -12,8 +12,11 @@ class Progress extends React.Component {
 
     render() {
         return (
-            <div class="progress">
-                <div class="bar" style={this.setProgress()}>
+            <div className="tooltip">
+                <div className="progress">
+                    <span className="tooltiptext">Popularity {this.props.popularity}/100</span>
+                    <div class="bar" style={this.setProgress()}>
+                    </div>
                 </div>
             </div>
         );
