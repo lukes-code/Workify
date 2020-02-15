@@ -109,7 +109,7 @@ class App extends Component {
           const explicit = this.state.userTop.tracks.explicit.concat(json.items[i].explicit);
           const popularity = this.state.userTop.tracks.popularity.concat(json.items[i].popularity);
           const duration = this.state.userTop.tracks.duration.concat(json.items[i].duration_ms);
-          if(json.items[i].explicit === true){
+          if(json.items[i].explicit === false){
             safe++;
           }
           this.setState({ 
