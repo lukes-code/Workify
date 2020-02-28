@@ -17,4 +17,4 @@ This API requires authentication through implicit flow (client side) in order to
 <br/>
 ____________________________________________________
 </br>
-![alt text](https://github.com/lukes-code/WorkSafe-Spotify/blob/master/src/workify1.jpg)
+https://github.com/lukes-code/WorkSafe-Spotify/blob/master/src/workify1.jpg
