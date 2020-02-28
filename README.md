@@ -14,3 +14,7 @@ This API requires authentication through implicit flow (client side) in order to
 ✔️ See their top ten tracks sorted by safe and not safe<br />
 <br />
 ![alt text](https://github.com/lukes-code/WorkSafe-Spotify/blob/master/src/workify-mockup.jpg)
+<br/>
+____________________________________________________
+</br>
+https://github.com/lukes-code/WorkSafe-Spotify/blob/master/src/workify1.jpg
