@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Search extends React.Component {
+class Searchbar extends React.Component {
     keyHandler = (e) => {
         if(e.keyCode === 13){
             this.props.search();
@@ -24,4 +24,4 @@ class Search extends React.Component {
     }
 }
 
-export default Search;
+export default Searchbar;

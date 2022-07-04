@@ -1,8 +1,7 @@
 import React from 'react';
 import Disclaimer from '../disclaimer.svg';
 
-class Welcome extends React.Component {
-    render() {
+const Welcome = (props) => {
         return (
             <div className="welcome">
                 <h1 id="disclaimer">Disclaimer</h1>
@@ -13,13 +12,12 @@ class Welcome extends React.Component {
                 <button
                     id="disclaimer-btn"
                     className="def-btn"
-                    onClick={this.props.enter}
+                    onClick={props.enter}
                 >
                     Enter
                 </button>
             </div>
         );
     }
-}
 
 export default Welcome;

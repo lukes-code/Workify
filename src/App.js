@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Artist from './components/Artist';
 import './App.css';
-import Search from './components/Search';
+import Searchbar from './components/Searchbar';
 import SafeTracks from './components/SafeTracks';
 import UnsafeTracks from './components/UnsafeTracks';
 import Sidebar from './components/Sidebar';
@@ -10,88 +10,61 @@ import Welcome from './components/Welcome';
 import UserTopTracks from './components/UserTopTracks';
 import UserLogo from './user.png';
 
-class App extends Component {
+const App = () => {
+    const [token, setToken] = useState(null);
+    const [username, setUsername] = useState('');
+    const [product, setProduct] = useState('');
+    const [followers, setFollowers] = useState();
+    const [query, setQuery] = useState();
+    const [hasSafe, setHasSafe] = useState('no');
+    let [safeNo, setSafeNo] = useState(0);
+    const [image, setImage] = useState();
+    const [safeTracks, setSafeTracks] = useState([]);
+    const [unsafeTracks, setUnsafeTracks] = useState([]);
+    const [topArtist, setTopArtist] = useState([]);
+    const [topTrack, setTopTrack] = useState([]);
+    const [topImage, setTopImage] = useState([]);
+    const [topExplicit, setTopExplicit] = useState([]);
+    const [topPopularity, setTopPopularity] = useState([]);
+    const [topDuration, setTopDuration] = useState([]);
+    const [artistImages, setArtistImages] = useState();
+    const [artistName, setArtistName] = useState();
+    const [artistFollowers, setArtistFollowers] = useState();
+    const [artistPopularity, setArtistPopularity] = useState();
+    const [topTracks, setTopTracks] = useState();
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: "", // my query
-      artist: null,  // my response.
-      topTracks: null,
-      hasSafeTracks: 'yes',
-      unsafeTracks: [],
-      safeTracks: [],
-      userDetails: ({
-        username: '',
-        product: '',
-        image: '',
-        followers: 0,
-      }),
-      userTop: ({
-        tracks: ({
-          artist: [],
-          track: [],
-          image: [],
-          explicit: [],
-          popularity: [],
-          duration: [],
-          safe: 0,
-        }),
-      }),
-      token: ''
-    }
-  }
-    componentDidMount() {
+    useEffect(() => {
       const queryUri = window.location.hash.substr(1);
-      if(queryUri !== ''){
-          var token = queryUri.match(/=(.*)&token_type/).pop();
+      if(queryUri && !token){
+        var newToken = queryUri.match(/=(.*)&token_type/).pop();
+        setToken(newToken);
       }
-      const { userToken } = this.state.token;
-      if(userToken !== '') {
-          this.setState({  token: token  });
-          // this.userLogin();
-      }
-    }
+    }, [token]);
 
-    login = (async) => {
-      const queryUri = window.location.hash.substr(1);
-      if(queryUri !== ''){
-          var token = queryUri.match(/=(.*)&token_type/).pop();
-      }
-      this.setState({ token: token });
-    }
-
-    userLogin = (async) => {
-      const BASE_URL = 'https://api.spotify.com/v1/';
-      const FETCHUSERDETAILS = 'me';
-      const userTop = 'me/top/';
-      const userTracks = 'tracks?time_range=medium_term&limit=25&offset=5';
-      var accessToken = this.state.token;
-      const FETCHUSERDETAILS_URL = BASE_URL + FETCHUSERDETAILS;
-      // const fetchUserTracks = BASE_URL + userTop + userTracks;
+    const UserLogin = (async) => {
+      const BASE_URL = 'https://api.spotify.com/v1/me';
       var myOptions = {
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + accessToken
+          'Authorization': 'Bearer ' + token
         },
         mode: 'cors',
         cache: 'default'
       };
 
       // Get current user details
-      fetch(FETCHUSERDETAILS_URL, myOptions)
+      fetch(BASE_URL, myOptions)
         .then(response => response.json())
         .then(json => {
-          // console.log(json);
-          const username = json.display_name;
-          const product = json.product;
-          const followers = json.followers.total;
-          const image = `${UserLogo}`;
-          if(json.images.length > 1){
-            const image = json.images[0].url;
-          } 
-          if(this.state.userDetails.username === ''){
-            this.setState({ userDetails: ({ username: username, product: product, followers: followers, image: image, })});
+          if(!username){
+            setUsername(json.display_name);
+            setProduct(json.product);
+            setFollowers(json.followers.total);
+            if (json.images.length > 1) { 
+              setImage(json.images[0].url);
+            } else {
+              setImage(UserLogo);
+            }
           }
         });
 
@@ -99,71 +72,49 @@ class App extends Component {
       fetch('https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=25&offset=5', myOptions)
       .then(response => response.json())
       .then(json => {
-        var i = 0;
-        let safe = 0;
-        // console.log(`user top tracks are - ${JSON.stringify(json.items[i].album)}`);
+        let i = 0;
+        let artists = [];
+        let tracks = [];
+        let images = [];
+        let explicit = [];
+        let popularity = [];
+        let duration = [];
         for (i = 0; i < json.items.length; i++) {
-          const jsonArtist = this.state.userTop.tracks.artist.concat(json.items[i].album.artists[0].name);
-          const jsonTracks = this.state.userTop.tracks.track.concat(json.items[i].name);
-          const jsonImage = this.state.userTop.tracks.image.concat(json.items[i].album.images[0].url);
-          const explicit = this.state.userTop.tracks.explicit.concat(json.items[i].explicit);
-          const popularity = this.state.userTop.tracks.popularity.concat(json.items[i].popularity);
-          const duration = this.state.userTop.tracks.duration.concat(json.items[i].duration_ms);
-          if(json.items[i].explicit === false){
-            safe++;
+          artists.push(json.items[i].album.artists[0].name);
+          tracks.push(json.items[i].name);
+          images.push(json.items[i].album.images[0].url);
+          explicit.push(json.items[i].explicit);
+          popularity.push(json.items[i].popularity);
+          duration.push(json.items[i].duration_ms);
+          if(!json.items[i].explicit){
+            setSafeNo(safeNo++);
           }
-          this.setState({ 
-            userTop: 
-            ({ tracks: 
-              ({ artist: jsonArtist, 
-                 track: jsonTracks,  
-                 image: jsonImage, 
-                 explicit: explicit, 
-                 popularity: popularity, 
-                 safe: safe,
-                 duration: duration,
-              }) 
-            }) 
-          });
         }
+        setTopArtist(topArtist => topArtist.concat(artists));
+        setTopTrack(topTrack => topTrack.concat(tracks));
+        setTopImage(topImage => topImage.concat(images));
+        setTopExplicit(topExplicit => topExplicit.concat(explicit));
+        setTopPopularity(topPopularity => topPopularity.concat(popularity));
+        setTopDuration(topDuration => topDuration.concat(duration));
       });
     }
 
-  search = (asycnc) => {
+  const Search = (asycnc) => {
     const BASE_URL = 'https://api.spotify.com/v1/';
-    const FETCHUSERDETAILS = 'me';
     const FETCHSEARCH = 'search?';
     const FETCHARTISTS = 'artists';
-    var accessToken = this.state.token;
-    const FETCHUSERDETAILS_URL = BASE_URL + FETCHUSERDETAILS;
-    const FETCHARTIST_URL = BASE_URL + FETCHSEARCH + 'q=' + this.state.query + '&type=artist&limit=1';
-    let FETCHTOPTRACKS_URL = '';
+    const FETCHARTIST_URL = BASE_URL + FETCHSEARCH + 'q=' + query + '&type=artist&limit=1';
     var myOptions = {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + accessToken
+        'Authorization': 'Bearer ' + token
       },
       mode: 'cors',
       cache: 'default'
     };
 
-    // Get current user details
-    fetch('https://api.spotify.com/v1/me', myOptions)
-      .then(response => response.json())
-      .then(json => {
-        // console.log(json);
-        const username = json.display_name;
-        const product = json.product;
-        const followers = json.followers.total;
-        const image = `${UserLogo}`;
-          if(json.images.length > 1){
-            const image = json.images[0].url;
-          } 
-        this.setState({ userDetails: ({ username: username, product: product, followers: followers, image: image, token: 'hi' })});
-      });
-
     //Fetch artist details and then search for top tracks
-    if(this.state.query === ''){
+    if(!query){
       return;
     }
     fetch(FETCHARTIST_URL, myOptions)
@@ -172,184 +123,165 @@ class App extends Component {
         if(json.artists.items.length < 1){
           return;
         }
-        const artist = json.artists.items[0];   
-        this.setState({ artist });
-        let FETCHTOPTRACKS_URL = BASE_URL + FETCHARTISTS + '/' + artist.id + '/top-tracks?country=GB';
+        setArtistImages(json.artists.items[0].images[0].url);
+        setArtistName(json.artists.items[0].name);
+        setArtistFollowers(json.artists.items[0].followers.total);
+        setArtistPopularity(json.artists.items[0].popularity);
+        let FETCHTOPTRACKS_URL = BASE_URL + FETCHARTISTS + '/' + json.artists.items[0].id + '/top-tracks?country=GB';
+        console.log(FETCHTOPTRACKS_URL);
         fetch(FETCHTOPTRACKS_URL, myOptions)
           .then(response => response.json())
           .then(json => {
-            const topTracks = json.tracks;
-            this.setState({ topTracks });
-            this.isTrackExplicit();
+            setTopTracks(json.tracks);
+            isTrackExplicit(json.tracks);
           });
       });
   }
 
-  componentDidUpdate() {
-    if(this.state.token !== ''){
-      // console.log('token not = to ""');
-    }
+  const Signout = () => {
+    setToken(null);
   }
 
-  signout = () => {
-    this.setState({ token: '' });
+  const UpdateQuery = (event) => {
+    setQuery(event.target.value);
   }
 
-  updateQuery = (event) => {
-    this.setState({ query: event.target.value })
-  }
-
-  isTrackExplicit = (async) => {
-    if(this.state.topTracks.filter(x => x.explicit === false)){
-      this.setState({ hasSafeTracks: 'yes' });
-      const safeTracks = {...this.state.safeTracks};
-      var result = this.state.topTracks.filter(x => x.explicit === false);
-      this.setState({ safeTracks: result });
+  const isTrackExplicit = (trackList) => {
+    console.log(trackList);
+    var result = '';
+    if(trackList.filter(x => x.explicit === false)){
+      setHasSafe('yes');
+      result = trackList.filter(x => x.explicit === false);
+      setSafeTracks(result);
     } else{
-      this.setState({ hasSafeTracks: 'no' });
+      setHasSafe('no');
     }
-    if(this.state.topTracks.filter(x => x.explicit === true)){
-      const unsafeTracks = {...this.state.unsafeTracks};
-      var result = this.state.topTracks.filter(x => x.explicit === true);
-      this.setState({ unsafeTracks: result });
+    if(trackList.filter(x => x.explicit === true)){
+      result = trackList.filter(x => x.explicit === true);
+      setUnsafeTracks(result);
     }
-    // console.log(result);
   }
-
-  render() {
-
-    let artist = {
-      name: '',
-      followers: {
-        total: ''
-      },
-      images: {
-        url: ''
-      }
-    };
-    if (this.state.artist !== null) {
-      artist = this.state.artist;
-    }
 
     //Set keys for multiple safe tracks
-    let safeTrack = this.state.safeTracks.map((safeTrack, i) => (
+    let safeTrack = safeTracks.map((safeTrack, i) => (
       <SafeTracks
         key={i}
         index={i}
-        safeTrack={this.state.safeTracks[i]}
+        image={safeTracks[i].album.images[2].url}
+        albumName={safeTracks[i].album.name}
+        trackName={safeTracks[i].name}
+        duration={safeTracks[i].duration_ms}
+        popularity={safeTracks[i].popularity}
       />
     ));
 
     //Set keys for multiple unsafe tracks
-    let unsafeTrack = this.state.unsafeTracks.map((unsafeTrack, i) => (
+    let unsafeTrack = unsafeTracks.map((unsafeTrack, i) => (
       <UnsafeTracks
         key={i}
         index={i}
-        unsafeTrack={this.state.unsafeTracks[i]}
+        image={unsafeTracks[i].album.images[2].url}
+        albumName={unsafeTracks[i].album.name}
+        trackName={unsafeTracks[i].name}
+        duration={unsafeTracks[i].duration_ms}
+        popularity={unsafeTracks[i].popularity}
       />
     ));
 
     //Set keys for multiple unsafe tracks
-    let userTopTracks = this.state.userTop.tracks.artist.map((userTopTrack, i) => (
+    let userTopTracks = topArtist.map((userTopTrack, i) => (
       <UserTopTracks
         key={i}
         index={i}
-        artist={this.state.userTop.tracks.artist[i]}
-        tracks={this.state.userTop.tracks.track[i]}
-        image={this.state.userTop.tracks.image[i]}
-        explicit={this.state.userTop.tracks.explicit[i]}
-        popularity={this.state.userTop.tracks.popularity[i]}
-        duration={this.state.userTop.tracks.duration[i]}
+        artist={topArtist[i]}
+        tracks={topTrack[i]}
+        image={topImage[i]}
+        explicit={topExplicit[i]}
+        popularity={topPopularity[i]}
+        duration={topDuration[i]}
       />
     ));
-
-    // console.log('this.state', this.state);
  
-    if(this.state.token === '' || this.state.token === undefined){
+    if(!token){
       return (
         <Landing 
-          login={this.login}
+          login={useEffect}
         />
       );
     }
-
-    if(this.state.userDetails.username == ''){
+    
+    if (!username) {
       return (
-        <React.Fragment>
-          <Welcome
-              enter={this.userLogin}
-          />
-        </React.Fragment>
+        <Welcome
+            enter={UserLogin}
+        />
       );
     }
     
-    if(this.state.artist == null){
+    if (!artistName) {
       return (
         <React.Fragment>
           <Sidebar
-              username={this.state.userDetails.username}
-              product={this.state.userDetails.product}
-              image={this.state.userDetails.image}
-              followers={this.state.userDetails.followers}
-              signout={this.signout}
+            username={username}
+            product={product}
+            image={image}
+            followers={followers}
+            signout={Signout}
           />
           <div className="landing-page">
-        <div className="main-bg">
-        <div className="searched">
-          <Search
-              updateQuery={this.updateQuery}
-              search={this.search}
-          />
-          <h2 className="track-label personal">YOUR TOP 25 SONGS</h2>
-          {/* {/* <h3 className="lowkey-track-label">SAFE FOR WORK</h3> */}
-          <h3 className="lowkey-track-label">{this.state.userTop.tracks.safe} OF THESE ARE WORK SAFE</h3>
-          {userTopTracks}
-        </div>
-        </div>
-      </div>
+            <div className="main-bg">
+              <div className="searched">
+                <Searchbar
+                    updateQuery={UpdateQuery}
+                    search={Search}
+                />
+                <h2 className="track-label personal">YOUR TOP 25 SONGS</h2>
+                <h3 className="lowkey-track-label">{safeNo} OF THESE ARE WORK SAFE</h3>
+                {userTopTracks}
+              </div>
+            </div>
+          </div>
         </React.Fragment>
       );
-    }
-    
+    } 
 
-    return (
-      <React.Fragment>
-      <Sidebar
-        username={this.state.userDetails.username}
-        product={this.state.userDetails.product}
-        image={this.state.userDetails.image}
-        followers={this.state.userDetails.followers}
-        signout={this.signout}
-      />
-      <div className="landing-page">
-        <div className="main-bg">
-        <img className="bg-image" id="bg-image" src={artist.images[0].url} alt="concertimage"/>
-        <div className="searched">
-          <Search
-              updateQuery={this.updateQuery}
-              search={this.search}
+      return (
+        <React.Fragment>
+          <Sidebar
+            username={username}
+            product={product}
+            image={image}
+            followers={followers}
+            signout={Signout}
           />
-        </div>
-        <Artist   
-          image={artist.images[0].url}
-          name={artist.name}
-          popularity={artist.popularity}
-          followers={artist.followers.total}
-          hasSafeTracks={this.state.hasSafeTracks}
-        />
-        <h2 className="track-label">TOP 10 SONGS</h2>
-        <h3 className="lowkey-track-label">{this.state.safeTracks.length} SAFE FOR WORK</h3>
-        <div className="safe-tracks">
-          {safeTrack}
-        </div>
-        <h3 className="lowkey-track-label">{this.state.unsafeTracks.length} NOT SAFE FOR WORK</h3>
-        <div className="unsafe-tracks">
-          {unsafeTrack}
-        </div>
-        </div>
-      </div>
-      </React.Fragment>
-    )
-  }
+          <div className="landing-page">
+            <div className="main-bg">
+              <img className="bg-image" id="bg-image" src={artistImages} alt="concertimage"/>
+              <div className="searched">
+                <Searchbar
+                    updateQuery={UpdateQuery}
+                    search={Search}
+                />
+              </div>
+              <Artist   
+                image={artistImages}
+                name={artistName}
+                popularity={artistPopularity}
+                followers={artistFollowers}
+                hasSafeTracks={hasSafe}
+              />
+              <h2 className="track-label">TOP 10 SONGS</h2>
+              <h3 className="lowkey-track-label">{safeTracks.length} SAFE FOR WORK</h3>
+              <div className="safe-tracks">
+                {safeTrack}
+              </div>
+              <h3 className="lowkey-track-label">{unsafeTracks.length} NOT SAFE FOR WORK</h3>
+              <div className="unsafe-tracks">
+                {unsafeTrack}
+              </div>
+            </div>
+          </div>
+        </React.Fragment>
+      );
 }
 export default App;
